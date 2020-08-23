@@ -6,7 +6,7 @@ export default function TaskList() {
   const { Issue } = useContext(IssueListContext);
   return (
     <div>
-      <ul>
+      <ul className="list">
         {Issue.map((issue) => {
           return <Task issue={issue} key={issue.id} />;
         })}

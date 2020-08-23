@@ -1,11 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Modal from "react-modal";
 import { IssueListContext } from "../context/TaskListContext";
 
 Modal.setAppElement("#root");
 
 const TaskButton = () => {
-  const { addIssue } = useContext(IssueListContext);
+  const { addIssue, editIssue, edit } = useContext(IssueListContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [issue, setIssue] = useState({
     name: "",
@@ -14,26 +14,48 @@ const TaskButton = () => {
 
   const handleChange = (e) => {
     setIssue({ ...issue, [e.target.name]: e.target.value });
-    console.log(issue);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addIssue(issue.name, issue.desc);
-    setIssue({
-      name: "",
-      desc: "",
-    });
+    if (editIssue === null) {
+      addIssue(issue.name, issue.desc);
+      setIssue({
+        name: "",
+        desc: "",
+      });
+      setModalIsOpen(false);
+    } else {
+      edit(issue.name, issue.desc, editIssue.id);
+      setIssue({
+        name: "",
+        desc: "",
+      });
+      setModalIsOpen(false);
+    }
   };
+  useEffect(() => {
+    if (editIssue !== null) {
+      issue.name = editIssue.name;
+      issue.desc = editIssue.description;
+      setModalIsOpen(true);
+    } else {
+      issue.name = "";
+      issue.des = "";
+    }
+  }, [editIssue]);
+
   return (
     <div>
-      <button onClick={() => setModalIsOpen(true)}>Add Issue</button>
+      <button className="btn add-task-btn" onClick={() => setModalIsOpen(true)}>
+        Add Issue
+      </button>
       <Modal
         isOpen={modalIsOpen}
         shouldCloseOnOverlayClick={true}
         onRequestClose={() => setModalIsOpen(false)}
       >
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="form">
           <input
             type="text"
             placeholder="Add Project Name"
@@ -50,12 +72,14 @@ const TaskButton = () => {
             name="desc"
             required
           />
-          <div>
-            <button type="submit">Add Issue</button>
+          <div className="buttons">
+            <button className="btn add-task-btn" type="submit">
+              {editIssue ? "Edit Issue" : "Add Issue"}
+            </button>
           </div>
-          <button type="submit" onClick={() => setModalIsOpen(false)}>
+          {/* <button type="submit" onClick={() => setModalIsOpen(false)}>
             Close
-          </button>
+          </button> */}
         </form>
       </Modal>
     </div>
