@@ -4,7 +4,7 @@ import { IssueListContext } from "../context/TaskListContext";
 
 Modal.setAppElement("#root");
 
-const TaskButton = () => {
+const TaskButton = ({ post }) => {
   const { addIssue, editIssue, edit } = useContext(IssueListContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [issue, setIssue] = useState({
@@ -47,7 +47,7 @@ const TaskButton = () => {
 
   return (
     <div>
-      <button className="btn add-task-btn" onClick={() => setModalIsOpen(true)}>
+      <button onClick={() => setModalIsOpen(true)} className="add-issue">
         Add Issue
       </button>
       <Modal
@@ -55,16 +55,17 @@ const TaskButton = () => {
         shouldCloseOnOverlayClick={true}
         onRequestClose={() => setModalIsOpen(false)}
       >
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Add Project Name"
             onChange={handleChange}
             value={issue.name}
             name="name"
+            size="50"
             required
           />
-          <input
+          <textarea
             type="text"
             placeholder="Add Issue Description"
             onChange={handleChange}
@@ -73,7 +74,11 @@ const TaskButton = () => {
             required
           />
           <div className="buttons">
-            <button className="btn add-task-btn" type="submit">
+            <button
+              className="btn add-task-btn"
+              type="submit"
+              className="add-issue"
+            >
               {editIssue ? "Edit Issue" : "Add Issue"}
             </button>
           </div>
