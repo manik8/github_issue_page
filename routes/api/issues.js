@@ -54,6 +54,15 @@ router.get("/list-issue", async (req, res) => {
   }
 });
 
+router.get("/get-pages", async (req, res) => {
+  try {
+    let issues = await ISSUE.find({}).sort("-createAt");
+    res.json(issues);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 // // @route    PATCH api/update-issue/:id
 // // @desc     Update an issue
 // // @access   Public
