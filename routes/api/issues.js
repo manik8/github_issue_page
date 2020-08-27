@@ -39,15 +39,18 @@ router.post(
 // @access   Public
 
 router.get("/list-issue", async (req, res) => {
-  const page = req.query.page;
-  const limit = req.query.limit;
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
 
-  const startIndex = (page - 1) * 5;
-  const endIndex = page * 5;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
   try {
-    let issues = await ISSUE.find({}).sort("-createAt");
-    issues = issues.slice(startIndex, endIndex);
-    res.json(issues);
+    const issues = await ISSUE.find({})
+      .skip((page - 1) * startIndex)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    res.send(issues);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -100,4 +103,5 @@ router.delete("/delete-issue/:id", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
 module.exports = router;

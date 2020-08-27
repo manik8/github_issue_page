@@ -26,13 +26,11 @@ export default class IssueList extends Component {
     }
   };
 
-  getNumOfPages = () => {
-    let { numOfPages } = this.state;
-  };
   deleteIssue = async (e) => {
-    const { id } = e.target;
+    const { _id } = e.target;
+    console.log(e.target);
     try {
-      await axios.delete(`/api/delete-issue/${id}`);
+      await axios.delete(`/api/delete-issue/${_id}`);
       this.props.history.push("/");
     } catch (err) {
       console.error(err.message);
@@ -41,6 +39,7 @@ export default class IssueList extends Component {
   editIssue = async (e) => {
     const { issues } = this.state;
     const { id } = e.target;
+    console.log(e.target);
 
     const index = issues.findIndex((issue) => issue._id === id);
 
@@ -71,19 +70,21 @@ export default class IssueList extends Component {
 
               <div className="file-time">{issue.date}</div>
 
-              <img
-                src="https://cdn.iconscout.com/icon/free/png-256/delete-844-902124.png"
-                alt="delete logo"
-                className="file-delete-icon"
-                onClick={this.deleteIssue}
-                style={{ width: "2%" }}
-              />
+              <abbr title="Delete">
+                <img
+                  src="https://cdn.iconscout.com/icon/free/png-256/delete-844-902124.png"
+                  alt="delete logo"
+                  className="file-delete-icon"
+                  onClick={this.deleteIssue}
+                  style={{ width: "2%" }}
+                />
+              </abbr>
 
               <abbr title="Edit">
                 <img
                   src="https://www.kindpng.com/picc/m/154-1541177_edit-document-button-comments-edit-button-icon-png.png"
                   id={issue._id}
-                  alt="delete logo"
+                  alt="Edit logo"
                   className="file-delete-icon edit-icon"
                   onClick={this.editIssue}
                   style={{ width: "2%" }}
