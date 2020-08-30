@@ -76,8 +76,6 @@ router.patch("/update-issue/:id", async (req, res) => {
     let issue = await ISSUE.findById(req.params.id);
 
     if (issue) {
-      issue.name = name;
-      issue.description = description;
     }
     await issue.save();
 
