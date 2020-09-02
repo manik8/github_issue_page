@@ -79,6 +79,7 @@ router.patch("/update-issue/:id", async (req, res) => {
       issue.name = name;
       issue.description = description;
     }
+    res.save();
 
     res.send(issue);
   } catch (err) {
